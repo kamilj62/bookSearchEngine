@@ -3,7 +3,8 @@ const { signToken, AuthenticationError } = require("../utils/auth");
 
 const resolvers = {
   Query: {
-    GET_ME: async (parent, args, context) => {
+    // Resolver for the 'me' query, which returns the logged-in user's details
+    me: async (parent, args, context) => {
       if (context.user) {
         return User.findOne({ _id: context.user._id });
       }
@@ -14,46 +15,55 @@ const resolvers = {
   },
 
   Mutation: {
-    ADD_USER: async (parent, { username, email, password }) => {
+    // Resolver for the 'addUser' mutation, which creates a new user and returns a token
+    addUser: async (parent, { username, email, password }) => {
       const user = await User.create({ username, email, password });
       const token = signToken(user);
       return { token, user };
     },
-    LOGIN_USER: async (parent, { email, password }) => {
+    // Resolver for the 'loginUser' mutation, which logs in a user and returns a token
+    loginUser: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
 
       if (!user) {
-        throw AuthenticationError;
+        throw new AuthenticationError("Invalid email or password.");
       }
 
       const correctPw = await user.isCorrectPassword(password);
 
       if (!correctPw) {
-        throw AuthenticationError;
+        throw new AuthenticationError("Invalid email or password.");
       }
 
       const token = signToken(user);
 
       return { token, user };
     },
-    SAVE_B00K: async (parent, args, content) => {
-      const book = await User.findOneAndUpdate(
-        { _id: user._id },
-        { $addToSet: { savedBooks: body } },
-        { new: true, runValidators: true }
-      );
-      return book;
+    // Resolver for the 'saveBook' mutation, which saves a book to the user's savedBooks array
+    saveBook: async (parent, args, context) => {
+      if (context.user) {
+        const updatedUser = await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $addToSet: { savedBooks: args } },
+          { new: true, runValidators: true }
+        );
+        return updatedUser;
+      }
+      throw new AuthenticationError("You need to be logged in to save a book.");
     },
-
-    // remove a book from `savedBooks`
-    DELETE_BOOK: async ({ parent, args, content }, res) => {
-      const updatedUser = await User.findOneAndUpdate(
-        { _id: user._id },
-        { $pull: { savedBooks: { bookId: params.bookId } } },
-        { new: true }
+    // Resolver for the 'deleteBook' mutation, which removes a book from the user's savedBooks array
+    deleteBook: async (parent, { bookId }, context) => {
+      if (context.user) {
+        const updatedUser = await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $pull: { savedBooks: { bookId } } },
+          { new: true }
+        );
+        return updatedUser;
+      }
+      throw new AuthenticationError(
+        "You need to be logged in to delete a book."
       );
-
-      return updatedUser;
     },
   },
 };

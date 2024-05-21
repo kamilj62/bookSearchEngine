@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-/* eslint-disable no-unused-vars */
+
 import { useState } from 'react';
 import {
   Container,
@@ -10,7 +9,6 @@ import {
 } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
 import { REMOVE_BOOK } from '../utils/mutations';
-// eslint-disable-next-line no-unused-vars
 import { GET_ME } from '../utils/queries';
 
 import Auth from '../utils/auth';
@@ -21,6 +19,8 @@ const SavedBooks = () => {
 
   // use this to determine if `useEffect()` hook needs to run again
   const userDataLength = Object.keys(userData).length;
+
+  const [removeBook] = useMutation(REMOVE_BOOK);
 
   useQuery(() => {
     const getUserData = async () => {
@@ -50,13 +50,6 @@ const SavedBooks = () => {
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
   const handleDeleteBook = async (bookId) => {
 
-   
-    const [removeBook] = useMutation(REMOVE_BOOK, {
-      refetchQueries: [
-        { query: GET_ME }
-      ]
-    });
-
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
     if (!token) {
@@ -64,7 +57,7 @@ const SavedBooks = () => {
     }
 
     try {
-      const data = await REMOVE_BOOK(bookId, token);
+      const data = await removeBook(bookId, token);
 
       if (!data) {
         throw new Error('something went wrong!');
