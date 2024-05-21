@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 
-import { CREATE_USER } from '../utils/mutations';
+import { ADD_USER } from '../utils/mutations';
 import Auth from '../utils/auth';
 
 const SignupForm = () => {
@@ -28,7 +28,7 @@ const SignupForm = () => {
     }
 
     try {
-      const {data} = await CREATE_USER({
+      const { data } = await ADD_USER({
         variables: { ...userFormData }
       });
 
@@ -36,7 +36,7 @@ const SignupForm = () => {
         throw new Error('something went wrong!');
       }
 
-      const { token, user } = data.CREATE_USER;
+      const { token, user } = data.ADD_USER
       console.log(user);
       Auth.login(token);
     } catch (err) {

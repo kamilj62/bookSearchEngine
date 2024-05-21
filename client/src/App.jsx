@@ -5,10 +5,11 @@ import {
   ApolloProvider,
   createHttpLink,
 } from '@apollo/client';
+//import { useState } from 'react';
 import { setContext } from '@apollo/client/link/context';
 import { Navbar } from 'react-bootstrap';
 import { Outlet } from 'react-router-dom';
-
+import AppNavbar from './components/Navbar';
 const httpLink = createHttpLink({
   uri: '/graphql',
 });
@@ -37,6 +38,7 @@ function App() {
     <ApolloProvider client={client}>
       <div className="flex-column justify-flex-start min-100-vh">
         < Navbar/>
+        < AppNavbar/>
         <div className="container">
           <Outlet />
         </div>
