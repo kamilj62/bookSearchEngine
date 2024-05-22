@@ -28,13 +28,12 @@ const LoginForm = () => {
       event.preventDefault();
       event.stopPropagation();
     }
-
+  
     try {
       const { data } = await loginUser({
         variables: { ...userFormData },
         
       });
-
       if (!data) {
         throw new Error('something went wrong!');
       }
@@ -50,7 +49,6 @@ const LoginForm = () => {
     }
 
     setUserFormData({
-      username: '',
       email: '',
       password: '',
     });

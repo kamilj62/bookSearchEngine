@@ -12,6 +12,7 @@ const typeDefs = gql`
   }
 
   type User {
+    _id: ID!
     username: String!
     email: String!
     bookCount: Int
@@ -42,7 +43,7 @@ const typeDefs = gql`
       image: String
       link: String
     ): User
-    deleteBook(bookId: ID!): User
+    removeBook(bookId: ID!): User
   }
 
   type Auth {

@@ -57,17 +57,19 @@ export const SAVE_BOOK = gql`
 
 export const REMOVE_BOOK = gql`
   mutation removeBook($bookId: ID!) {
-    _id
-    username
-    email
-    bookCount
-    savedBooks {
-      bookId
-      authors
-      title
-      description
-      image
-      link
+    removeBook(bookId: $bookId) {
+      _id
+      username
+      email
+      bookCount
+      savedBooks {
+        authors
+        description
+        bookId
+        image
+        link
+        title
+      }
     }
   }
 `;

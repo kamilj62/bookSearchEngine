@@ -52,7 +52,7 @@ const resolvers = {
       throw new AuthenticationError("You need to be logged in to save a book.");
     },
     // Resolver for the 'deleteBook' mutation, which removes a book from the user's savedBooks array
-    deleteBook: async (parent, { bookId }, context) => {
+    removeBook: async (parent, { bookId }, context) => {
       if (context.user) {
         const updatedUser = await User.findOneAndUpdate(
           { _id: context.user._id },
