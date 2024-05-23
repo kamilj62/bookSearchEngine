@@ -15,37 +15,8 @@ import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
 
 const SavedBooks = () => {
-  //const [userData, setUserData] = useState({});
-
-  // use this to determine if `useEffect()` hook needs to run again
-  //const userDataLength = Object.keys(userData).length;
 
   const [removeBook] = useMutation(REMOVE_BOOK);
-
-  // useQuery(() => {
-  //   const getUserData = async () => {
-  //     try {
-  //       const token = Auth.loggedIn() ? Auth.getToken() : null;
-
-  //       if (!token) {
-  //         return false;
-  //       }
-
-  //       const userData = await GET_ME(token);
-
-  //       if (!userData) {
-  //         throw new Error('something went wrong!');
-  //       }
-
-  //       const user = await userData.json();
-  //       setUserData(user);
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   };
-
-  //   getUserData();
-  // }, [userDataLength]);
 
   const {data, loading} = useQuery(GET_ME)
   
@@ -68,9 +39,7 @@ const SavedBooks = () => {
         throw new Error('something went wrong!');
       }
 
-      //const updatedUser = await data.json();
-      //setUserData(updatedUser);
-      // upon success, remove book's id from localStorage
+      
       removeBookId(bookId);
     } catch (err) {
       console.error(err);
