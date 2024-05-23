@@ -1,5 +1,6 @@
-import * as dotenv from "dotenv";
-import { MongoClient } from "mongodb";
+//const { MongoClient } = require("mongodb");
+const dotenv = require("dotenv").config();
+console.log(process.env.MONGODB_URI);
 
 const express = require("express");
 const { ApolloServer } = require("@apollo/server");
@@ -17,9 +18,7 @@ const server = new ApolloServer({
   resolvers,
 });
 
-dotenv.configure();
-
-const client = new MongoClient(process.env.URI);
+//const client = new MongoClient(process.env.URI);
 
 // Create a new instance of an Apollo server with the GraphQL schema
 const startApolloServer = async () => {
